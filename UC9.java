@@ -1,0 +1,91 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+/**
+ * ==================================================================
+ * MAIN CLASS - UseCase9TrainConsistMgmt
+ * ==================================================================
+ *
+ * Use Case 9: Group Bogies by Type
+ *
+ * Description:
+ * This class groups similar bogies together using
+ * Java Stream Collectors.groupingBy().
+ *
+ * At this stage, the application:
+ * - Creates a list of bogies
+ * - Streams the list
+ * - Groups bogies by name
+ * - Stores grouped data in a Map
+ * - Displays grouped structure
+ *
+ * This maps classification logic using groupingBy.
+ *
+ * @author Developer
+ * @version 9.0
+ */
+public class UC9 {
+
+    // Reusing Bogie model from UC7 / UC8
+    public static class Bogie {
+        String name;
+        int capacity;
+
+        public Bogie(String name, int capacity) {
+            this.name = name;
+            this.capacity = capacity;
+        }
+
+        @Override
+        public String toString() {
+            return name + " -> " + capacity;
+        }
+    }
+
+    /**
+     * Groups bogies by their type/name using Stream API.
+     * Logic extracted to allow for clean unit testing.
+     */
+    public static Map<String, List<Bogie>> groupBogiesByType(List<Bogie> bogies) {
+        return bogies.stream()
+                .collect(Collectors.groupingBy(b -> b.name));
+    }
+
+    public static void main(String[] args) {
+
+        System.out.println("=========================================");
+        System.out.println(" UC9 - Group Bogies by Type ");
+        System.out.println("=========================================\n");
+
+        // Create list of bogies
+        List<Bogie> bogies = new ArrayList<>();
+        bogies.add(new Bogie("Sleeper", 72));
+        bogies.add(new Bogie("AC Chair", 56));
+        bogies.add(new Bogie("First Class", 24));
+        bogies.add(new Bogie("Sleeper", 70));
+        bogies.add(new Bogie("AC Chair", 60));
+
+        // Display input bogies
+        System.out.println("All Bogies:");
+        for (Bogie b : bogies) {
+            System.out.println(b);
+        }
+
+        // ---- GROUP USING COLLECTORS.GROUPINGBY ----
+        Map<String, List<Bogie>> groupedBogies = groupBogiesByType(bogies);
+
+        // Display grouped structure
+        System.out.println("\nGrouped Bogies:\n");
+        for (Map.Entry<String, List<Bogie>> entry : groupedBogies.entrySet()) {
+            System.out.println("Bogie Type: " + entry.getKey());
+            for (Bogie b : entry.getValue()) {
+                System.out.println("  Capacity -> " + b.capacity);
+            }
+            System.out.println();
+        }
+
+        System.out.println("UC9 grouping completed...");
+    }
+}
